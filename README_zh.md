@@ -8,7 +8,7 @@
 
 - **精确注意力**：`softmax(QKᵀ/√d)·V`，支持 causal（因果 mask）与 non-causal（全注意力）。
 - **FlashAttention 核心算法**：分块 tiling + 在线 softmax（online softmax），
-  全程不实化 S×S 注意力矩阵（S=36864 时该矩阵 fp32 达 243GB，必须分块）。
+  全程不实化 S×S 注意力矩阵（S=36864 时，单个 head 的 S×S 矩阵 fp32 就约 5.4 GB，必须分块）。
 - **bf16 张量核计算**：QKᵀ 与 PV 两个矩阵乘用 `nvcuda::wmma` bf16 tensor core 指令，fp32 累加。
 - **寄存器驻留**：S、P、累加器 acc 全程放在 WMMA fragment 寄存器里，shared 只放 Q/K/V。
 - **共享内存 padding**：stride 128→136 消除 8 路 bank conflict（实测提速 2 倍）。
