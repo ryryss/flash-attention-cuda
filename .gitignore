@@ -1,0 +1,16 @@
+# build artifacts
+*.dll
+*.exe
+*.lib
+*.exp
+*.obj
+*.o
+*.so
+*.pdb
+
+# python
+__pycache__/
+*.pyc
+
+# nvcc temp
+tmpxft_*
