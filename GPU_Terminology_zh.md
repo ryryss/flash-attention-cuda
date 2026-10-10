@@ -159,7 +159,7 @@ QKᵀ+softmax+PV 融合成"分块+在线 softmax"，不写 S×S 大矩阵。
 内存加载"发出即返回"，后台搬，warp 先干别的。
 
 ### Software Pipelining（软件流水线）
-把下一块料的准备塞进这一块料的加工空档。本项目尚未做，是逼近 cuDNN 的关键。
+把下一块料的准备塞进这一块料的加工空档。本项目已实测：因需三缓冲把 occupancy 减半，收益被抵消，与单块版持平。
 
 ### Warp Specialization（warp 专业化）
 生产者 warp 专职搬运、消费者 warp 专职计算。

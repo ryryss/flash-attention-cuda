@@ -9,8 +9,9 @@ hand-written CUDA with WMMA bf16 tensor cores, tuned step by step on an RTX 4070
 - bf16 tensor cores (WMMA) + fp32 accumulation, register-resident S/P/acc.
 - Shared-memory padding to kill bank conflicts; cp.async prefetch; 2 blocks/SM occupancy.
 
-Target shape `[B=1, H=48, S=36864, D=128]` bf16:
-**820 ms** (40.7 TFLOPS) non-causal, beating PyTorch's mem_efficient backend (856 ms).
+Target shape `[B=1, H=48, S=36864, D=128]` bf16 (measured on the same RTX 4070 SUPER):
+**~820 ms** (40.7 TFLOPS) non-causal, roughly on par with PyTorch's mem_efficient
+backend (~820–856 ms, within thermal noise); cuDNN is clearly faster (~565 ms).
 
 > 中文说明见 [README_zh.md](./README_zh.md) · GPU terminology cheat-sheet: [GPU_Terminology_zh.md](./GPU_Terminology_zh.md)
 
@@ -47,5 +48,3 @@ out = flash_attn(q, k, v, causal=False)
 ## Limitations
 
 - D=128, bf16, single GPU only.
-- Current bottleneck is tensor-core idling caused by the serial
-  QK^T→softmax→PV structure; next step is software pipelining.

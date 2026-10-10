@@ -34,7 +34,7 @@
 | torch cuDNN（闭源） | 565 ms（59.1 TFLOPS） | 295 ms |
 | torch mem_efficient（开源） | 856 ms（39.0 TFLOPS） | 433 ms |
 
-- 非因果下**反超 PyTorch mem_efficient**，达 cuDNN 的 0.69x。
+- 非因果下与 PyTorch mem_efficient **基本持平**（同一硬件实测，差异约 ±4% 落在热噪声范围），约为 cuDNN 的 0.7x。
 - 正确性：vs fp32 参考实现，max abs err ≈ 8e-3（bf16 精度内）。
 
 ## 迭代历程（累计 13.4 倍加速）
@@ -97,5 +97,3 @@ out = flash_attn(q, k, v, causal=False)
 ## 已知局限
 
 - 仅支持 D=128、bf16、单 GPU。
-- 当前瓶颈为串行结构 QK^T→softmax→PV 造成的张量核空转（利用率 ~54%），
-  下一步优化方向为 software pipelining（交错相邻 tile 的计算填满空档）。
